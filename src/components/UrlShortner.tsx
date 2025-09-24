@@ -65,9 +65,13 @@ const UrlShortner = () => {
 
             const data = await res.json();
             setShortUrl(data.shortUrl);
-        } catch (err: any) {
+        } catch (err: unknown) {
             console.error(err);
-            toast.error(err.message || "Something went wrong.");
+            if (err instanceof Error) {
+                toast.error(err.message);
+            } else {
+                toast.error("Something went wrong.");
+            }
         } finally {
             setLoading(false);
         }

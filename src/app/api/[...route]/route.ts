@@ -1,4 +1,4 @@
-import { Hono } from "hono";
+import { Context, Hono, Next } from "hono";
 import shorten from "./routes/shorten";
 import redirect from "./routes/redirect";
 import stats from "./routes/stats";
@@ -19,7 +19,7 @@ const ratelimit = new Ratelimit({
 });
 
 // Hono middleware for rate limiting
-const rateLimitMiddleware = async (c: any, next: any) => {
+const rateLimitMiddleware = async (c: Context, next: Next) => {
   const ip =
     c.req.header("x-forwarded-for") ||
     c.req.header("cf-connecting-ip") ||
