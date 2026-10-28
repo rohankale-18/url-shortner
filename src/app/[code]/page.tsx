@@ -2,6 +2,9 @@
 import { ThemeToggle } from "@/components/ThemeToggle"
 import { getAndIncrement } from "@/db/queries"
 import { redirect } from "next/navigation"
+import { Redis } from "@upstash/redis"
+
+const redis = Redis.fromEnv()
 
 type Props = {
   params: Promise<{ code: string }>
@@ -9,6 +12,11 @@ type Props = {
 
 export default async function RedirectPage({ params }: Props) {
   const { code } = await params
+
+  const cachedUrl = await redis.get<string>(`short:${code}`)
+  if (cachedUrl) {
+    redirect(cachedUrl)
+  }
 
   const url = await getAndIncrement(code)
 

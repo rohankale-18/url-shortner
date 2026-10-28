@@ -1,4 +1,5 @@
 import { createShortUrl } from "@/db/queries";
+import { isValidUrl } from "@/lib/validate-url";
 import { Redis } from "@upstash/redis";
 import { Hono } from "hono";
 
@@ -9,6 +10,10 @@ shorten.post("/", async (c) => {
     const { url } = await c.req.json<{ url: string }>();
 
     if (!url) return c.json({ error: "URL required" }, 400);
+
+    if (!isValidUrl(url)) {
+        return c.json({ error: "Invalid URL" }, 400);
+    }
 
     const newUrl = await createShortUrl(url);
 

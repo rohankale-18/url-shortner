@@ -6,30 +6,13 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Copy, Check } from "lucide-react";
 import { toast } from "sonner";
+import { isValidUrl } from "@/lib/validate-url";
 
 const UrlShortner = () => {
     const [url, setUrl] = useState("");
     const [shortUrl, setShortUrl] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
     const [copied, setCopied] = useState(false);
-
-    const isValidUrl = (url: string) => {
-        try {
-            const parsed = new URL(url);
-            if (parsed.protocol !== "http:" && parsed.protocol !== "https:") {
-                return false;
-            }
-            if (
-                parsed.hostname === "localhost" ||
-                parsed.hostname.includes(".")
-            ) {
-                return true;
-            }
-            return false;
-        } catch {
-            return false;
-        }
-    };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();

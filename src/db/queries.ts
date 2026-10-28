@@ -1,7 +1,7 @@
 // apps/api/src/db/queries.ts
 import { db } from "./client"
 import { urls } from "./schema"
-import { count, eq } from "drizzle-orm"
+import { count, eq, sql } from "drizzle-orm"
 import { nanoid } from "nanoid"
 
 export async function createShortUrl(longUrl: string) {
@@ -26,18 +26,12 @@ export async function createShortUrl(longUrl: string) {
 
 export async function getAndIncrement(code: string) {
   const [url] = await db
-    .select()
-    .from(urls)
-    .where(eq(urls.code, code))
-
-  if (!url) return null
-
-  await db
     .update(urls)
-    .set({ clickCount: url.clickCount + 1 })
-    .where(eq(urls.id, url.id))
+    .set({ clickCount: sql`${urls.clickCount} + 1` })
+    .where(eq(urls.code, code))
+    .returning()
 
-  return url.longUrl
+  return url ? url.longUrl : null
 }
 
 export async function getUrlCount() {

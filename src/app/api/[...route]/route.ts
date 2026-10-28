@@ -1,6 +1,5 @@
 import { Context, Hono, Next } from "hono";
 import shorten from "./routes/shorten";
-import redirect from "./routes/redirect";
 import stats from "./routes/stats";
 export const dynamic = "force-dynamic";
 
@@ -40,7 +39,6 @@ app.use("/shorten/*", rateLimitMiddleware); // attach middleware to all /shorten
 app.route("/shorten", shorten);  
 
 // Other routes, no rate limiting
-app.route("/:code", redirect);
 app.route("/stats", stats);
 
 export const GET = app.fetch;
