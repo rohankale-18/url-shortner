@@ -55,10 +55,10 @@ pnpm install
 Create a .env file in the root directory:
 ```
 DATABASE_URL=your_neon_postgresql_connection_string
-REDIS_URL=your_upstash_redis_connection_string
+UPSTASH_REDIS_REST_URL=your_upstash_redis_rest_url
 UPSTASH_REDIS_REST_TOKEN=your_upstash_redis_rest_token_string
 ```
-Replace with your actual Neon PostgreSQL, Upstash Redis connection string and Upstash Redis rest token.
+`UPSTASH_REDIS_REST_URL` and `UPSTASH_REDIS_REST_TOKEN` are read by `Redis.fromEnv()` in the code — use the **REST API URL** from the Upstash dashboard (`https://<name>.upstash.io`), not the `rediss://` connection string.
 
 ### 4 Run the development server
 ```
